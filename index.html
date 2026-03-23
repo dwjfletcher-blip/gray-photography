@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gray Photography — Memories Shot on Digital or Film</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --border: #222222;
+      --text: #d8d8d8;
+      --muted: #6a6a6a;
+      --white: #f0f0f0;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* grain */
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.3;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      padding: 1.75rem 3.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.96) 0%, transparent 100%);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--white); text-decoration: none;
+    }
+    .nav-logo strong { font-weight: 600; }
+    .nav-links { display: flex; gap: 2.75rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted); text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-links a:focus-visible { outline: 1px solid var(--white); outline-offset: 4px; }
+
+    /* HAMBURGER */
+    .nav-menu-btn {
+      display: none; flex-direction: column; gap: 5px; background: none; border: none;
+      cursor: pointer; padding: 4px;
+    }
+    .nav-menu-btn span {
+      display: block; width: 24px; height: 1px; background: var(--white);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 490;
+      background: rgba(10,10,10,0.98); flex-direction: column;
+      align-items: center; justify-content: center; gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300;
+      letter-spacing: 0.1em; color: var(--white); text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .mobile-menu a:hover { color: var(--muted); }
+    .mobile-menu-close {
+      position: absolute; top: 1.75rem; right: 3.5rem; background: none; border: none;
+      color: var(--muted); font-size: 1.5rem; cursor: pointer; font-family: 'Inter', sans-serif;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative; height: 100vh; min-height: 640px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; filter: grayscale(100%) brightness(0.55); transform: scale(1.02);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10,10,10,1) 0%,
+        rgba(10,10,10,0.65) 40%,
+        rgba(10,10,10,0.2) 80%,
+        transparent 100%
+      );
+    }
+    .hero-side-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(10,10,10,0.7) 0%, transparent 60%);
+    }
+    .hero-content {
+      position: relative; z-index: 10;
+      padding: 0 3.5rem 5.5rem;
+      max-width: 680px;
+    }
+    .eyebrow {
+      display: flex; align-items: center; gap: 0.875rem; margin-bottom: 1.5rem;
+      font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .eyebrow::before { content: ''; display: block; width: 36px; height: 1px; background: var(--muted); }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.25rem, 6vw, 5.5rem);
+      font-weight: 300; line-height: 1.05; letter-spacing: -0.02em;
+      color: var(--white); margin-bottom: 1.5rem;
+    }
+    .hero h1 em { font-style: italic; }
+    .hero-sub {
+      font-size: 0.9375rem; line-height: 1.75;
+      color: rgba(208,208,208,0.55); margin-bottom: 2.75rem; max-width: 420px;
+    }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--white); color: #0a0a0a;
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 1rem 2.25rem; text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 2px 16px rgba(240,240,240,0.1), 0 1px 3px rgba(0,0,0,0.5);
+      transition: background 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+    }
+    .btn-primary:hover { background: #ffffff; transform: translateY(-2px); box-shadow: 0 6px 28px rgba(240,240,240,0.15); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: var(--text);
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 1rem 2.25rem; text-decoration: none; border: 1px solid rgba(208,208,208,0.2); cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-ghost:hover { border-color: rgba(208,208,208,0.55); background: rgba(208,208,208,0.05); transform: translateY(-2px); }
+    .btn-ghost:active { transform: translateY(0); }
+    .btn-ghost:focus-visible { outline: 1px solid var(--white); outline-offset: 3px; }
+
+    /* SCROLL INDICATOR */
+    .scroll-hint {
+      position: absolute; bottom: 2rem; right: 3.5rem; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    }
+    .scroll-line {
+      width: 1px; height: 48px; background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(0.7); }
+    }
+
+    /* WORK PREVIEW */
+    .section { padding: 6rem 3.5rem; }
+    .section-header { margin-bottom: 3rem; }
+    .section-label {
+      font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 0.625rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 300; line-height: 1.15; letter-spacing: -0.01em; color: var(--white);
+    }
+
+    .preview-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: auto auto; gap: 2px; background: var(--border);
+    }
+    .preview-item {
+      position: relative; overflow: hidden;
+      background: var(--surface); cursor: pointer;
+    }
+    .preview-item:first-child { grid-row: 1 / 3; aspect-ratio: unset; min-height: 520px; }
+    .preview-item:not(:first-child) { aspect-ratio: 4/3; }
+    .preview-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) brightness(0.75);
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s ease;
+    }
+    .preview-item:hover img { transform: scale(1.05); filter: grayscale(100%) brightness(0.9); }
+    .preview-item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.35s ease;
+      display: flex; align-items: flex-end; padding: 1.25rem 1.5rem;
+    }
+    .preview-item:hover .preview-item-overlay { opacity: 1; }
+    .preview-item-label {
+      font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    }
+
+    .section-cta { margin-top: 2.5rem; }
+
+    /* CATEGORY STRIP */
+    .category-strip {
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      display: flex;
+    }
+    .category-item {
+      flex: 1; padding: 2.75rem 3.5rem; border-right: 1px solid var(--border);
+      text-decoration: none; display: flex; flex-direction: column; gap: 0.625rem;
+      transition: background 0.2s ease;
+    }
+    .category-item:last-child { border-right: none; }
+    .category-item:hover { background: var(--surface); }
+    .category-item:focus-visible { outline: 1px solid var(--white); outline-offset: -2px; }
+    .category-num {
+      font-family: 'Cormorant Garamond', serif; font-size: 0.75rem;
+      color: var(--muted); letter-spacing: 0.1em;
+    }
+    .category-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.625rem;
+      font-weight: 300; color: var(--white); letter-spacing: 0.05em;
+    }
+    .category-desc { font-size: 0.8125rem; line-height: 1.6; color: var(--muted); max-width: 200px; }
+    .category-arrow {
+      margin-top: 1rem; font-size: 1rem; color: var(--muted);
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+    .category-item:hover .category-arrow { transform: translateX(5px); color: var(--white); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border); padding: 2.25rem 3.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif; font-size: 0.9rem;
+      font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+    }
+    .footer-copy { font-size: 0.6875rem; letter-spacing: 0.06em; color: var(--muted); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem 2rem; }
+      .nav-links { display: none; }
+      .nav-menu-btn { display: flex; }
+      .hero-content { padding: 0 2rem 4rem; }
+      .section { padding: 4rem 2rem; }
+      .preview-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .preview-item:first-child { grid-row: auto; grid-column: 1 / 3; min-height: 300px; }
+      .category-strip { flex-direction: column; }
+      .category-item { border-right: none; border-bottom: 1px solid var(--border); padding: 2rem 2rem; }
+      footer { flex-direction: column; gap: 0.875rem; text-align: center; padding: 2rem; }
+      .scroll-hint { right: 2rem; }
+    }
+    @media (max-width: 540px) {
+      .preview-grid { grid-template-columns: 1fr; }
+      .preview-item:first-child { grid-column: auto; }
+      .hero h1 { font-size: 2.75rem; }
+      .hero-ctas { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="menuClose" aria-label="Close menu">✕</button>
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo"><strong>Gray</strong> Photography</a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+    </div>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="hero-bg" src="https://placehold.co/1920x1080/0d0d0d/2a2a2a" alt="Gray Photography hero backdrop" />
+    <div class="hero-overlay"></div>
+    <div class="hero-side-overlay"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Gray Photography</p>
+      <h1>Memories Shot<br /><em>on Digital or Film</em></h1>
+      <p class="hero-sub">Amateur photography capturing quiet moments and honest light — preserved on digital sensor and analog film.</p>
+      <div class="hero-ctas">
+        <a href="gallery.html" class="btn-primary">View Gallery &nbsp;→</a>
+        <a href="about.html" class="btn-ghost">About</a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- SELECTED WORK -->
+  <section class="section">
+    <div class="section-header">
+      <p class="section-label">Selected Work</p>
+      <h2 class="section-title">Recent Photographs</h2>
+    </div>
+    <div class="preview-grid">
+      <div class="preview-item">
+        <img src="https://placehold.co/900x1200/111111/2e2e2e" alt="Featured photograph" />
+        <div class="preview-item-overlay"><span class="preview-item-label">Digital</span></div>
+      </div>
+      <div class="preview-item">
+        <img src="https://placehold.co/600x450/161616/303030" alt="Film photograph" />
+        <div class="preview-item-overlay"><span class="preview-item-label">Film</span></div>
+      </div>
+      <div class="preview-item">
+        <img src="https://placehold.co/600x450/1a1a1a/383838" alt="Medium format photograph" />
+        <div class="preview-item-overlay"><span class="preview-item-label">Medium Format</span></div>
+      </div>
+      <div class="preview-item">
+        <img src="https://placehold.co/600x450/131313/2c2c2c" alt="Film photograph" />
+        <div class="preview-item-overlay"><span class="preview-item-label">Film</span></div>
+      </div>
+      <div class="preview-item">
+        <img src="https://placehold.co/600x450/181818/353535" alt="Digital photograph" />
+        <div class="preview-item-overlay"><span class="preview-item-label">Digital</span></div>
+      </div>
+    </div>
+    <div class="section-cta">
+      <a href="gallery.html" class="btn-ghost">View Full Gallery &nbsp;→</a>
+    </div>
+  </section>
+
+  <!-- CATEGORY STRIP -->
+  <div class="category-strip">
+    <a href="gallery.html?filter=digital" class="category-item">
+      <span class="category-num">01</span>
+      <span class="category-name">Digital</span>
+      <span class="category-desc">Modern sensor photography. Fast, precise, versatile.</span>
+      <span class="category-arrow">→</span>
+    </a>
+    <a href="gallery.html?filter=film" class="category-item">
+      <span class="category-num">02</span>
+      <span class="category-name">Film</span>
+      <span class="category-desc">35mm analog. Grain, warmth, and intentional frames.</span>
+      <span class="category-arrow">→</span>
+    </a>
+    <a href="gallery.html?filter=medium-format" class="category-item">
+      <span class="category-num">03</span>
+      <span class="category-name">Medium Format</span>
+      <span class="category-desc">120 film. Extraordinary tonal range and detail.</span>
+      <span class="category-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="index.html" class="footer-brand">Gray Photography</a>
+    <span class="footer-copy">&copy; 2025 Gray Photography. All rights reserved.</span>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const menuClose = document.getElementById('menuClose');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+    menuClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  </script>
+</body>
+</html>

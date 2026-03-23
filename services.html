@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services — Gray Photography</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a; --surface: #141414; --surface2: #1a1a1a; --border: #222222;
+      --text: #d8d8d8; --muted: #6a6a6a; --white: #f0f0f0;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.3;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      padding: 1.75rem 3.5rem; display: flex; align-items: center; justify-content: space-between;
+      background: rgba(10,10,10,0.97); border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--white); text-decoration: none;
+    }
+    .nav-logo strong { font-weight: 600; }
+    .nav-links { display: flex; gap: 2.75rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s ease;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-links a:focus-visible { outline: 1px solid var(--white); outline-offset: 4px; }
+    .nav-menu-btn {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .nav-menu-btn span { display: block; width: 24px; height: 1px; background: var(--white); }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 490;
+      background: rgba(10,10,10,0.98); flex-direction: column;
+      align-items: center; justify-content: center; gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300;
+      letter-spacing: 0.1em; color: var(--white); text-decoration: none; transition: color 0.2s ease;
+    }
+    .mobile-menu a:hover { color: var(--muted); }
+    .mobile-menu-close {
+      position: absolute; top: 1.75rem; right: 3.5rem; background: none; border: none;
+      color: var(--muted); font-size: 1.5rem; cursor: pointer;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 8rem 3.5rem 4rem; border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: end;
+    }
+    .page-eyebrow {
+      font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.875rem;
+    }
+    .page-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--muted); }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300; letter-spacing: -0.02em; color: var(--white);
+    }
+    .header-desc {
+      font-size: 0.9375rem; line-height: 1.8; color: rgba(216,216,216,0.55);
+      max-width: 420px; align-self: end;
+    }
+
+    /* SERVICES LIST */
+    .services-list { border-bottom: 1px solid var(--border); }
+    .service-row {
+      display: grid; grid-template-columns: 80px 1fr 1fr auto;
+      gap: 3rem; padding: 3rem 3.5rem; border-bottom: 1px solid var(--border);
+      align-items: start; cursor: default;
+      transition: background 0.2s ease;
+    }
+    .service-row:last-child { border-bottom: none; }
+    .service-row:hover { background: var(--surface); }
+    .service-num {
+      font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300;
+      color: var(--border); line-height: 1;
+    }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.75rem;
+      font-weight: 300; color: var(--white); margin-bottom: 0.75rem; letter-spacing: 0.02em;
+    }
+    .service-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .service-tag {
+      font-size: 0.6rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--border); padding: 0.25rem 0.625rem;
+    }
+    .service-desc {
+      font-size: 0.875rem; line-height: 1.75; color: rgba(216,216,216,0.55); padding-top: 0.25rem;
+    }
+    .service-includes { padding-top: 0.25rem; }
+    .includes-label {
+      font-size: 0.625rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.875rem;
+    }
+    .includes-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .includes-list li {
+      font-size: 0.8125rem; line-height: 1.5; color: var(--muted);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .includes-list li::before { content: ''; display: block; width: 14px; height: 1px; background: var(--border); flex-shrink: 0; }
+
+    /* PHOTO GRID — decorative */
+    .deco-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+      background: var(--border);
+    }
+    .deco-item {
+      aspect-ratio: 1; overflow: hidden; background: var(--surface);
+    }
+    .deco-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) brightness(0.6);
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.35s ease;
+    }
+    .deco-item:hover img { transform: scale(1.05); filter: grayscale(100%) brightness(0.8); }
+
+    /* PROCESS */
+    .process-section { padding: 5rem 3.5rem; border-bottom: 1px solid var(--border); }
+    .section-header { margin-bottom: 3rem; }
+    .section-label {
+      font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 0.625rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 300; letter-spacing: -0.01em; color: var(--white);
+    }
+    .process-steps {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; border: 1px solid var(--border);
+    }
+    .process-step {
+      padding: 2.25rem 2rem; border-right: 1px solid var(--border);
+    }
+    .process-step:last-child { border-right: none; }
+    .step-num {
+      font-family: 'Cormorant Garamond', serif; font-size: 2.25rem; font-weight: 300;
+      color: var(--border); margin-bottom: 1rem; line-height: 1;
+    }
+    .step-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.125rem; font-weight: 300;
+      color: var(--white); margin-bottom: 0.625rem;
+    }
+    .step-desc { font-size: 0.8125rem; line-height: 1.7; color: var(--muted); }
+
+    /* CTA STRIP */
+    .cta-section {
+      padding: 5rem 3.5rem;
+      display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center;
+    }
+    .cta-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+      font-weight: 300; color: var(--white); line-height: 1.3;
+    }
+    .cta-heading em { font-style: italic; color: rgba(240,240,240,0.6); }
+    .cta-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--white); color: #0a0a0a;
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 1rem 2.25rem; text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 2px 16px rgba(240,240,240,0.08);
+      transition: background 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-primary:hover { background: #ffffff; transform: translateY(-2px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: var(--text);
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 1rem 2.25rem; text-decoration: none; border: 1px solid rgba(216,216,216,0.2); cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-ghost:hover { border-color: rgba(216,216,216,0.5); background: rgba(216,216,216,0.05); transform: translateY(-2px); }
+    .btn-ghost:active { transform: translateY(0); }
+    .btn-ghost:focus-visible { outline: 1px solid var(--white); outline-offset: 3px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border); padding: 2.25rem 3.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif; font-size: 0.9rem;
+      font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+    }
+    .footer-copy { font-size: 0.6875rem; letter-spacing: 0.06em; color: var(--muted); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1100px) {
+      .service-row { grid-template-columns: 60px 1fr 1fr; grid-template-rows: auto auto; }
+      .service-row > *:last-child { grid-column: 2 / -1; }
+    }
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem 2rem; }
+      .nav-links { display: none; }
+      .nav-menu-btn { display: flex; }
+      .page-header { grid-template-columns: 1fr; padding: 7rem 2rem 3rem; gap: 1.5rem; }
+      .service-row { grid-template-columns: 1fr; gap: 1rem; padding: 2.5rem 2rem; }
+      .service-num { font-size: 2rem; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .process-step:nth-child(2) { border-right: none; }
+      .process-step:nth-child(3) { border-right: 1px solid var(--border); border-top: 1px solid var(--border); }
+      .process-step:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .process-section { padding: 3.5rem 2rem; }
+      .deco-grid { grid-template-columns: repeat(2, 1fr); }
+      .cta-section { grid-template-columns: 1fr; padding: 3.5rem 2rem; }
+      footer { flex-direction: column; gap: 0.875rem; text-align: center; padding: 2rem; }
+    }
+    @media (max-width: 540px) {
+      .process-steps { grid-template-columns: 1fr; }
+      .process-step { border-right: none !important; border-top: 1px solid var(--border); }
+      .process-step:first-child { border-top: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="menuClose" aria-label="Close menu">✕</button>
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+  </div>
+
+  <nav>
+    <a href="index.html" class="nav-logo"><strong>Gray</strong> Photography</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="services.html" class="active">Services</a>
+    </div>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div>
+      <p class="page-eyebrow">Offerings</p>
+      <h1 class="page-title">Services</h1>
+    </div>
+    <p class="header-desc">Gray Photography offers a focused set of services built around honest, monochrome work — digital, film, and medium format.</p>
+  </header>
+
+  <!-- SERVICES -->
+  <section class="services-list">
+
+    <div class="service-row">
+      <span class="service-num">01</span>
+      <div>
+        <h2 class="service-name">Portrait Sessions</h2>
+        <div class="service-tags">
+          <span class="service-tag">Digital</span>
+          <span class="service-tag">Film</span>
+          <span class="service-tag">Indoor / Outdoor</span>
+        </div>
+      </div>
+      <p class="service-desc">Candid and posed portrait sessions shot in a natural, relaxed style. Available on digital for fast turnaround or on film for a timeless quality. No forced smiles — just honest moments.</p>
+      <div class="service-includes">
+        <p class="includes-label">Includes</p>
+        <ul class="includes-list">
+          <li>1–2 hour session</li>
+          <li>Location scouting</li>
+          <li>Digital delivery of edited selects</li>
+          <li>Film option: scanned high-res files</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="service-row">
+      <span class="service-num">02</span>
+      <div>
+        <h2 class="service-name">Prints</h2>
+        <div class="service-tags">
+          <span class="service-tag">All Formats</span>
+          <span class="service-tag">Fine Art</span>
+          <span class="service-tag">Various Sizes</span>
+        </div>
+      </div>
+      <p class="service-desc">Fine art prints made from digital, 35mm film, or medium format negatives. Printed on archival matte paper. Available in a range of sizes — from desk-friendly 5×7 to large-format 16×20.</p>
+      <div class="service-includes">
+        <p class="includes-label">Includes</p>
+        <ul class="includes-list">
+          <li>Archival paper stock</li>
+          <li>Signed & numbered editions</li>
+          <li>Sizes: 5×7, 8×10, 11×14, 16×20</li>
+          <li>Custom sizing available</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="service-row">
+      <span class="service-num">03</span>
+      <div>
+        <h2 class="service-name">Film Scanning</h2>
+        <div class="service-tags">
+          <span class="service-tag">35mm</span>
+          <span class="service-tag">120 / Medium Format</span>
+          <span class="service-tag">High Resolution</span>
+        </div>
+      </div>
+      <p class="service-desc">High-resolution scanning of developed 35mm and 120 medium format film. Delivered as lossless TIFF files with basic dust removal. Bring your negatives to life in digital form without losing the grain and character of film.</p>
+      <div class="service-includes">
+        <p class="includes-label">Includes</p>
+        <ul class="includes-list">
+          <li>35mm & 120 format rolls</li>
+          <li>High-res TIFF delivery</li>
+          <li>Basic dust & scratch removal</li>
+          <li>Private download link</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="service-row">
+      <span class="service-num">04</span>
+      <div>
+        <h2 class="service-name">Event Photography</h2>
+        <div class="service-tags">
+          <span class="service-tag">Digital</span>
+          <span class="service-tag">Candid</span>
+          <span class="service-tag">Small Events</span>
+        </div>
+      </div>
+      <p class="service-desc">Unobtrusive coverage of small events — gatherings, shows, studio sessions, or everyday occasions worth remembering. Shot in a documentary style: no posing, no staging, just the room as it is.</p>
+      <div class="service-includes">
+        <p class="includes-label">Includes</p>
+        <ul class="includes-list">
+          <li>Up to 4 hours of coverage</li>
+          <li>Edited selects delivered digitally</li>
+          <li>Monochrome edit as standard</li>
+          <li>Online gallery for sharing</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- DECO GRID -->
+  <div class="deco-grid">
+    <div class="deco-item"><img src="https://placehold.co/600x600/111111/282828" alt="" /></div>
+    <div class="deco-item"><img src="https://placehold.co/600x600/181818/333333" alt="" /></div>
+    <div class="deco-item"><img src="https://placehold.co/600x600/141414/2e2e2e" alt="" /></div>
+    <div class="deco-item"><img src="https://placehold.co/600x600/1a1a1a/373737" alt="" /></div>
+  </div>
+
+  <!-- PROCESS -->
+  <section class="process-section">
+    <div class="section-header">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title">The Process</h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-title">Get in Touch</div>
+        <p class="step-desc">Reach out with your project idea. Sessions, prints, scanning — describe what you're looking for and we'll go from there.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-title">Plan Together</div>
+        <p class="step-desc">We'll align on format (digital, film, or medium format), location, timing, and any specific shots or moods you have in mind.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-title">Shoot & Develop</div>
+        <p class="step-desc">The session or project is completed. Film is sent for development and scanning; digital files are culled and edited by hand.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-title">Delivery</div>
+        <p class="step-desc">Edited files are delivered via a private online gallery or as physical prints, depending on what was arranged.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2 class="cta-heading">Ready to start a project?<br /><em>Let's make something worth keeping.</em></h2>
+    <div class="cta-actions">
+      <a href="gallery.html" class="btn-ghost">View Gallery &nbsp;→</a>
+      <a href="about.html" class="btn-primary">About Gray Photography</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="index.html" class="footer-brand">Gray Photography</a>
+    <span class="footer-copy">&copy; 2025 Gray Photography. All rights reserved.</span>
+  </footer>
+
+  <script>
+    document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
+    document.getElementById('menuClose').addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
+  </script>
+</body>
+</html>
