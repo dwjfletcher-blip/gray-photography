@@ -8,8 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0a0a0a; --surface: #141414; --border: #222222;
-      --text: #d8d8d8; --muted: #6a6a6a; --white: #f0f0f0;
+      --bg: #060606; --surface: #0c0c0c; --border: #181818;
+      --text: #999999; --muted: #444444; --white: #cccccc;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
@@ -22,7 +22,7 @@
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 500;
       padding: 1.75rem 3.5rem; display: flex; align-items: center; justify-content: space-between;
-      background: rgba(10,10,10,0.97); border-bottom: 1px solid var(--border);
+      background: rgba(4,4,4,0.98); border-bottom: 1px solid var(--border);
     }
     .nav-logo {
       font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300;
@@ -43,7 +43,7 @@
     .nav-menu-btn span { display: block; width: 24px; height: 1px; background: var(--white); }
     .mobile-menu {
       display: none; position: fixed; inset: 0; z-index: 490;
-      background: rgba(10,10,10,0.98); flex-direction: column;
+      background: rgba(3,3,3,0.99); flex-direction: column;
       align-items: center; justify-content: center; gap: 2.5rem;
     }
     .mobile-menu.open { display: flex; }
@@ -68,7 +68,7 @@
     }
     .about-hero-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.4) 60%, transparent 100%);
+      background: linear-gradient(to top, rgba(6,6,6,1) 0%, rgba(10,10,10,0.4) 60%, transparent 100%);
     }
     .about-hero-content {
       position: relative; z-index: 10; padding: 0 3.5rem 4rem;
@@ -177,13 +177,13 @@
     }
     .btn-primary {
       display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--white); color: #0a0a0a;
+      background: #1e1e1e; color: #aaaaaa;
       font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
       padding: 1rem 2.25rem; text-decoration: none; border: none; cursor: pointer;
       box-shadow: 0 2px 16px rgba(240,240,240,0.08), 0 1px 3px rgba(0,0,0,0.5);
       transition: background 0.2s ease, transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
     }
-    .btn-primary:hover { background: #ffffff; transform: translateY(-2px); }
+    .btn-primary:hover { background: #2a2a2a; transform: translateY(-2px); }
     .btn-primary:active { transform: translateY(0); }
     .btn-primary:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
 
